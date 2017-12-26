@@ -1,4 +1,4 @@
-from linq.core.collections import Generator as MGenerator
+from linq.core.collections import Generator as MGenerator, Deducer
 from linq.core.flow import Flow
 # see the standard library to get all the extension methods.
 import linq.standard
@@ -7,7 +7,6 @@ seq = Flow(MGenerator(lambda x: x + 1, start_elem=0))  # [0..\infty]
 # See the definition of MGenerator at https://github.com/thautwarm/ActualFn.py/blob/master/linq/core/collections.py.
 # It's a generalization of PyGenerator.
 # What's more, it can be deepcopid and serialized!
-
 
 """
 Example 1:
@@ -28,7 +27,7 @@ print(sum([a * b for a, b in enumerate(range(10))]))
 """
 Example 2:
 """
-
+print('\n================\n')
 # Adding Skip to provide another semantic of Drop
 print(seq.Skip(10).Take(5).ToList().Unboxed())
 # => [10, 11, 12, 13, 14]
@@ -41,6 +40,7 @@ print(seq.Skip(5).Take(10).Drop(5).ToList().Unboxed())
 """
 Example 3:
 """
+print('\n================\n')
 
 print(seq.Take(10).Reduce(lambda x, y: x + y, 10).Unboxed())
 # cumulate a single result using a start value.
@@ -87,7 +87,7 @@ for e in grouped.items():
 """
 Example 5:
 """
-
+print('\n================\n')
 from linq.core.flow import extension_class, Flow
 
 
@@ -104,3 +104,26 @@ except Exception as e:
  NameError: No extension method named `ToTupleGenerator` for builtins.object.
 """
 print(seq.Take(10).Zip(seq.Take(10)).ToDict().ToTupleGenerator())
+
+
+"""
+Example 6:
+"""
+print('\n================\n')
+
+seq2 = Flow(i for i in range(30))
+print(seq2.Depend(-1).Take(10).ToList().Unboxed())
+
+
+"""
+Example 7:
+"""
+print('\n================\n')
+
+print(Flow(Deducer.determine(1, 2, 3, 4, 5)).ToList().Unboxed())
+# => [1, 2, 3, 4, 5]
+print(Flow(0 + Deducer.determine(1, 2, 3, 4, 5)).ToList().Unboxed())
+# => [0, 1, 2, 3, 4, 5]
+fib = Flow(Deducer.deduce(lambda x, y: x + y, 1, 1))
+print(fib.Take(10).ToList().Unboxed())
+# => [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]

@@ -1,4 +1,4 @@
-from ..core.collections import ScanGenerator
+from ..core.collections import Scanner
 from ..core.flow import *
 from ..core.utils import *
 from functools import reduce
@@ -54,7 +54,7 @@ def Then(self: Flow, f):
 
 @extension_std
 def Scan(self: Flow, f, start_elem):
-    return Flow(ScanGenerator(f, self.stream, start_elem))
+    return Flow(Scanner(f, self.stream, start_elem))
 
 
 @extension_std
