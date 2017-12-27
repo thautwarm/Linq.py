@@ -12,3 +12,12 @@ def Intersects(self: Flow, *others) -> {'others': 'Seq<Seq> | Seq<Flow<Seq>>'}:
 @extension_class(set)
 def Union(self: Flow, *others) -> {'others': 'Seq<Seq> | Seq<Flow<Seq>>'}:
     return Flow(set.union(self.stream, *[unbox_if_flow(other) for other in others]))
+
+
+@extension_class(set)
+def Difference(self: Flow, *others) -> {'others': 'Seq<Seq> | Seq<Flow<Seq>>'}:
+    return Flow(set.difference(self.stream, *[unbox_if_flow(other) for other in others]))
+
+@extension_class(set)
+def Symmetric_difference(self: Flow, *other) -> {'others': 'Seq<Seq> | Seq<Flow<Seq>>'}:
+    return Flow(set.symmetric_difference(self.stream, *[unbox_if_flow(other) for other in others]))
