@@ -91,7 +91,7 @@ def Sorted(self: Flow, by):
 
 @extension_class(list)
 def Sort(self: Flow, by):
-    if not is_to_destruct(by):
+    if is_to_destruct(by):
         by = destruct_func(by)
     self.stream.sort(key=by)
     return self

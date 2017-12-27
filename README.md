@@ -1,9 +1,36 @@
 # Linq.py 
-[![Build Status](https://travis-ci.org/thautwarm/Linq.py.svg?branch=master)](https://travis-ci.org/thautwarm/Linq.py)
-[![License](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/thautwarm/Linq.py/blob/master/LICENSE)
-[![codecov](https://codecov.io/gh/thautwarm/Linq.py/branch/master/graph/badge.svg)](https://codecov.io/gh/thautwarm/Linq.py)
 
-- PS: [Coverage Here](https://travis-ci.org/thautwarm/Linq.py/jobs/318643137).  
+[![Build Status](https://travis-ci.org/Xython/Linq.py.svg?branch=master)](https://travis-ci.org/Xython/Linq.py)
+[![License](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/Xython/Linq.py/blob/master/LICENSE)
+[![codecov](https://codecov.io/gh/Xython/Linq.py/branch/master/graph/badge.svg)](https://codecov.io/gh/Xython/Linq.py)
+[![Coverage Status](https://coveralls.io/repos/github/Xython/Linq.py/badge.svg?branch=master)](https://coveralls.io/github/Xython/Linq.py?branch=master)
+[![PyPI version](https://img.shields.io/pypi/v/Linq.svg)](https://pypi.python.org/pypi/Linq)
+
+## Install
+
+```
+pip install -U Linq
+```
+
+Here is an example to get top 10 frequent pixels in a picture.
+
+```python
+
+from linq import Flow
+import numpy as np
+
+def most_frequent(arr: np.ndarray) -> np.ndarray:
+    return  Flow(arr.flatten())                     \
+                    .GroupBy(lambda _: _)           \
+                    .Then(lambda x: x.items())      \
+                    .Map(lambda k, v: (k, len(v)))  \
+                    .Sorted(by=lambda _, v: -v)     \
+                    .Take(10)                       \
+                    .Map(lambda k, _: k)            \
+                    .ToList()                       \
+                    .Then(np.array).Unboxed()
+```
+
 
 ## About Linq
 
@@ -77,7 +104,7 @@ res = seq.Zip(range(100, 200)).Map(lambda fst, snd : fst/snd).GroupBy(lambda num
 ```
 
 
-## How does [Linq.py](https://github.com/thautwarm/Linq.py) work?
+## How does [Linq.py](https://github.com/Xython/Linq.py) work?
 
 There is a core class object, `linq.core.flow.Flow`, which just has one member `stream`.  
 When you want to get a specific extension method from `Flow` object,
@@ -141,49 +168,49 @@ Note: Docs haven't been finished yet.
 
 - General(can be used by all Flow objects)
 
-    - [Unboxed]()
-    - [Sum]()
-    - [Enum]()
-    - [Map]()
-    - [Reduce]()
-    - [Then]()
-    - [Each]()
-    - [Aggregate]()
-    - [Zip]()
-    - [Sorted]()
-    - [ArgSorted]()
-    - [Group]()
-    - [GroupBy]()
-    - [Take]()
-    - [TakeWhile]()
-    - [Drop]()
-    - [Concat]()
-    - [ToList]()
-    - [ToTuple]()
-    - [ToDict]()
-    - [ToSet]()
-    - [All]()
-    - [Any]()
+    - [Unboxed](https://github.com/Xython/Linq.py/blob/master/docs/general.md#unboxed)
+    - [Sum](https://github.com/Xython/Linq.py/blob/master/docs/general.md#sum)
+    - [Enum](https://github.com/Xython/Linq.py/blob/master/docs/general.md#enum)
+    - [Map](https://github.com/Xython/Linq.py/blob/master/docs/general.md#map)
+    - [Reduce](https://github.com/Xython/Linq.py/blob/master/docs/general.md#reduce)
+    - [Then](https://github.com/Xython/Linq.py/blob/master/docs/general.md#then)
+    - [Each](https://github.com/Xython/Linq.py/blob/master/docs/general.md#each)
+    - [Aggregate](https://github.com/Xython/Linq.py/blob/master/docs/general.md#aggregate)
+    - [Zip](https://github.com/Xython/Linq.py/blob/master/docs/general.md#zip)
+    - [Sorted](https://github.com/Xython/Linq.py/blob/master/docs/general.md#sorted)
+    - [ArgSorted](https://github.com/Xython/Linq.py/blob/master/docs/general.md#argsorted)
+    - [Group](https://github.com/Xython/Linq.py/blob/master/docs/general.md#group)
+    - [GroupBy](https://github.com/Xython/Linq.py/blob/master/docs/general.md#groupby)
+    - [Take](https://github.com/Xython/Linq.py/blob/master/docs/general.md#take)
+    - [TakeWhile](https://github.com/Xython/Linq.py/blob/master/docs/general.md#takewhile)
+    - [Drop|Skip](https://github.com/Xython/Linq.py/blob/master/docs/general.md#drop|skip)
+    - [Concat](https://github.com/Xython/Linq.py/blob/master/docs/general.md#concat)
+    - [ToList](https://github.com/Xython/Linq.py/blob/master/docs/general.md#tolist)
+    - [ToTuple](https://github.com/Xython/Linq.py/blob/master/docs/general.md#totuple)
+    - [ToDict](https://github.com/Xython/Linq.py/blob/master/docs/general.md#todict)
+    - [ToSet](https://github.com/Xython/Linq.py/blob/master/docs/general.md#toset)
+    - [All](https://github.com/Xython/Linq.py/blob/master/docs/general.md#all)
+    - [Any](https://github.com/Xython/Linq.py/blob/master/docs/general.md#any)
 
 - List
 
-    - [Extended]()
-    - [Extend]()
-    - [Sort]()
-    - [Reversed]()
-    - [Reverse]()
+    - [Extended](https://github.com/Xython/Linq.py/blob/master/docs/list.md#extended)
+    - [Extend](https://github.com/Xython/Linq.py/blob/master/docs/list.md#extend)
+    - [Sort](https://github.com/Xython/Linq.py/blob/master/docs/list.md#sort)
+    - [Reversed](https://github.com/Xython/Linq.py/blob/master/docs/list.md#reversed)
+    - [Reverse](https://github.com/Xython/Linq.py/blob/master/docs/list.md#reverse)
     
 - Set
 
-    - [Intersects]()
-    - [Union]()
+    - [Intersects](https://github.com/Xython/Linq.py/blob/master/docs/set.md#intersects)
+    - [Union](https://github.com/Xython/Linq.py/blob/master/docs/set.md#union)
 
 ## How to Contribute 
 
-- Design the [standard library](https://github.com/thautwarm/Linq.py/tree/master/linq/standard) for [Linq.py](https://github.com/thautwarm/Linq.py).
+- Design the [standard library](https://github.com/Xython/Linq.py/tree/master/linq/standard) for [Linq.py](https://github.com/Xython/Linq.py).
 
-- Write documents for the standard library and tutorials about how to use [Linq.py](https://github.com/thautwarm/Linq.py).  
+- Write documents for the standard library and tutorials about how to use [Linq.py](https://github.com/Xython/Linq.py).  
 
-- Join [LinqPy Room](https://gitter.im/LinqPy/Lobby) to discuss about any aspects of [Linq.py](https://github.com/thautwarm/Linq.py).
+- Join [LinqPy Room](https://gitter.im/LinqPy/Lobby) to discuss about any aspects of [Linq.py](https://github.com/Xython/Linq.py).
 
 Feel free to pull requests here.
