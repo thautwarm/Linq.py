@@ -1,6 +1,6 @@
 # see the standard library to get all the extension methods.
 
-from linq.core.collections import Generator as MGenerator
+from linq.core.collections import Deducer
 from linq import Flow, extension_class, extension_class_name
 
 
@@ -12,7 +12,7 @@ def test_other():
         else:
             raise StopIteration
 
-    res = Flow(MGenerator(block_lambda, 0)).Take(100).ToList()
+    res = Flow(Deducer.deduce(block_lambda, 0)).Take(100).ToList()
 
     assert res.__str__() == res.__repr__()
 
@@ -23,7 +23,7 @@ test_other()
 def my_test(func):
     def call():
         global seq
-        seq = Flow(MGenerator(lambda x: x + 1, start_elem=0))  # [0..\infty]
+        seq = Flow(Deducer.deduce(lambda x: x + 1, 0))  # [0..\infty]
         func.__globals__['seq'] = seq
         func()
 
@@ -35,8 +35,6 @@ def test_example1():
     # See the definition of MGenerator at https://github.com/thautwarm/ActualFn.py/blob/master/linq/core/collections.py.
     # It's a generalization of PyGenerator.
     # What's more, it can be deepcopid and serialized!
-
-
     """
     Example 1:
     """
@@ -162,3 +160,23 @@ def test_extension_byclsname():
 
 test_extension_byclsname()
 Flow((i for i in range(10))).MyNext()
+
+
+"""
+Example 6:
+"""
+deducer_seq1 = Deducer.determine(1, 2, 3, 4, 5)
+print(list(deducer_seq1))
+# => [1, 2, 3, 4, 5]
+
+deducer_seq2 = Deducer.deduce(lambda x: x + 1, 0)
+print([e for (e, _) in zip(deducer_seq2, range(10))])
+# => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+deducer_seq3 = Deducer.deduce(lambda x, y: x + y, 1, 1)
+print([e for (e, _) in zip(deducer_seq3, range(10))])
+# => [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+
+deducer_seq4 = Deducer.scan(lambda x, y: x + y, deducer_seq2, 10)
+print([e for (e, _) in zip(deducer_seq4, range(10))])
+# => [10, 11, 13, 16, 20, 25, 31, 38, 46, 55]

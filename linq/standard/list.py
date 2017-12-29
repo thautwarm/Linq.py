@@ -23,7 +23,7 @@ def Extend(self: Flow, *others):
 
 @extension_class(list)
 def Appended(self: Flow, elem):
-    stream = self.stream[:] + [elem]
+    stream = self.stream + [elem]
     return Flow(stream)
 
 
@@ -35,7 +35,7 @@ def Append(self: Flow, elem):
 
 @extension_class(list)
 def Depended(self: Flow, elem):
-    stream = [elem] + self.stream[:]
+    stream = [elem] + self.stream
     return Flow(stream)
 
 
@@ -82,7 +82,7 @@ def Insert(self: Flow, idx, elem):
 
 @extension_class(list)
 def Sorted(self: Flow, by):
-    if not is_to_destruct(by):
+    if is_to_destruct(by):
         by = destruct_func(by)
     stream = self.stream[:]
     stream.sort(key=by)

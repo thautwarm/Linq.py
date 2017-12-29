@@ -1,4 +1,4 @@
-from ..core.collections import Scanner
+from ..core.collections import Deducer
 from ..core.flow import *
 from ..core.utils import *
 from functools import reduce
@@ -54,12 +54,12 @@ def Then(self: Flow, f):
 
 @extension_std
 def Scan(self: Flow, f, start_elem):
-    return Flow(Scanner(f, self.stream, start_elem))
+    return Flow(Deducer.scan(f, self.stream, start_elem))
 
 
 @extension_std
 def Reduce(self: Flow, f, start_elem=None):
-    return Flow(reduce(f, self.stream) if start_elem is None else reduce(f, self.stream))
+    return Flow(reduce(f, self.stream) if start_elem is None else reduce(f, self.stream, start_elem))
 
 
 @extension_std

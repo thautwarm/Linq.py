@@ -1,43 +1,6 @@
 from ..core.utils import concat_generator
 
 
-class Generator:
-    def __init__(self, rule, start_elem):
-        self.rule = rule
-        self.start_elem = start_elem
-
-    def __iter__(self):
-        now = self.start_elem
-        while True:
-            try:
-                yield now
-                now = self.rule(now)
-            except StopIteration:
-                break
-
-
-class Unitter(Generator):
-    def __init__(self, unit):
-        def stop(_):
-            raise StopIteration()
-
-        super().__init__(stop, unit)
-
-
-class Scanner:
-    def __init__(self, rule, seq, start_elem):
-        self.rule = rule
-        self.seq = seq
-        self.start_elem = start_elem
-
-    def __iter__(self):
-        last = self.start_elem
-        for now in self.seq:
-            acc = self.rule(last, now)
-            yield acc
-            last = acc
-
-
 class Deducer:
     def __init__(self, first, rest=None):
         self.first = first
@@ -53,7 +16,16 @@ class Deducer:
     @classmethod
     def deduce(cls, f, *initializer):
         return cls(initializer[0], lambda: cls.deduce(f, *initializer[1:],
-                   f(*initializer)))
+                                                      f(*initializer)))
+
+    @classmethod
+    def scan(cls, rule, seq, start_elem):
+        try:
+            last = start_elem
+            now = rule(last, next(seq))
+            return cls(now, lambda: cls.scan(rule, seq, now))
+        except StopIteration:
+            return cls(None, None)
 
     def __radd__(self, left):
         return Deducer(left, lambda: self.determine(self.first, *self.rest()))
@@ -61,8 +33,16 @@ class Deducer:
     def __iter__(self):
         try:
             if self.first is None:
-                raise StopIteration()
+                raise StopIteration
             yield self.first
             yield from self.rest()
         except StopIteration:
             pass
+
+    def __next__(self):
+        if self.first is None:
+            raise StopIteration
+        now = self.first
+        nex = self.rest()
+        self.first, self.rest = nex.first, nex.rest
+        return now
