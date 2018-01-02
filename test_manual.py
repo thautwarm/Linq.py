@@ -135,8 +135,8 @@ def test_example5():
     """
 
     @extension_class(dict)
-    def ToTupleGenerator(self: Flow):
-        return Flow((k, v) for k, v in self.stream.items()).ToTuple().Unboxed()
+    def ToTupleGenerator(self: dict):
+        return Flow(((k, v) for k, v in self.items())).ToTuple().Unboxed()
 
     try:
         seq.Take(10).ToTupleGenerator()
@@ -154,8 +154,8 @@ test_example5()
 @my_test
 def test_extension_byclsname():
     @extension_class_name('generator')
-    def MyNext(self: Flow):
-        return self.Then(next)
+    def MyNext(self):
+        return next(self)
 
 
 test_extension_byclsname()
