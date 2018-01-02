@@ -1,6 +1,3 @@
-from ..core.utils import concat_generator
-
-
 class Deducer:
     def __init__(self, first, rest=None):
         self.first = first
