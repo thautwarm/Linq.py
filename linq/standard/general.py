@@ -48,13 +48,13 @@ def Then(self: object, f):
 
 
 @extension_std
-def Scan(self: Flow, f, start_elem):
-    return Flow(Deducer.scan(f, self.stream, start_elem))
+def Scan(self: Iterable, f, start_elem):
+    return Deducer.scan(f, self, start_elem)
 
 
 @extension_std
-def Reduce(self: Flow, f, start_elem=None):
-    return Flow(reduce(f, self.stream) if start_elem is None else reduce(f, self.stream, start_elem))
+def Reduce(self: Iterable, f, start_elem=None):
+    return reduce(f, self) if start_elem is None else reduce(f, self, start_elem)
 
 
 @extension_std
