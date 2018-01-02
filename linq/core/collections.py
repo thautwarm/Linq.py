@@ -39,7 +39,6 @@ class Deducer:
     def __next__(self):
         if self.first is None:
             raise StopIteration
-        now = self.first
-        nex = self.rest()
+        now, nex = self.first, self.rest()
         self.first, self.rest = nex.first, nex.rest
         return now
