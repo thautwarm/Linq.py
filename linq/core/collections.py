@@ -12,8 +12,7 @@ class Deducer:
 
     @classmethod
     def deduce(cls, f, *initializer):
-        return cls(initializer[0], lambda: cls.deduce(f, *initializer[1:],
-                                                      f(*initializer)))
+        return cls(initializer[0], lambda: cls.deduce(f, *(initializer[1:] + (f(*initializer),))))
 
     @classmethod
     def scan(cls, rule, seq, start_elem):
