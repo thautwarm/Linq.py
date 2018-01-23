@@ -18,9 +18,10 @@ class Deducer:
     @classmethod
     def scan(cls, rule, seq, start_elem):
         try:
+            iterator = iter(seq)
             last = start_elem
-            now = rule(last, next(seq))
-            return cls(now, lambda: cls.scan(rule, seq, now))
+            now = rule(last, next(iterator))
+            return cls(now, lambda: cls.scan(rule, iterator, now))
         except StopIteration:
             return cls(None, None)
 
