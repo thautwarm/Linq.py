@@ -1,4 +1,4 @@
-from ..core.collections import ScanGenerator
+from ..core.collections import Deducer
 from ..core.flow import *
 from ..core.utils import *
 from functools import reduce
@@ -49,7 +49,7 @@ def Then(self: object, f):
 
 @extension_std
 def Scan(self: Iterable, f, start_elem):
-    return ScanGenerator(f, self, start_elem)
+    return Deducer.scan(f, self, start_elem)
 
 
 @extension_std
